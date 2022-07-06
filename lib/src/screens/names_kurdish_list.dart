@@ -34,17 +34,17 @@ class DropdownList extends StatefulWidget {
 }
 
 class _DropdownListState extends State<DropdownList> {
-  final genderr = ['Female', 'Male'];
-  String defgender = 'Male';
-  var limitt = ["10", "20", "40", "60"];
+  KurdishNamesService _namesService = KurdishNamesService();
+
+  final genderr = ['Both', 'Female', 'Male'];
+  String defgender = 'Both';
+  var limitt = ["10", "20", "40", "60", "100", "250", "500"];
   String deflimit = "10";
-  var sortt = ['positive', 'negative'];
+  final sortt = ['positive', 'negative'];
   String defsort = 'positive';
   var isPositive = true;
   @override
   Widget build(BuildContext context) {
-    KurdishNamesService _namesService = KurdishNamesService();
-
     // TODO: implement build
     return Column(
       children: [
@@ -58,7 +58,9 @@ class _DropdownListState extends State<DropdownList> {
                   elevation: 5,
                   borderRadius: BorderRadius.circular(10),
                   style: TextStyle(
-                      color: Colors.indigo, fontWeight: FontWeight.bold,fontSize: 18),
+                      color: Colors.indigo,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18),
                   underline: Container(height: 3, color: Colors.indigo),
                   value: defgender,
                   items: genderr.map((String item) {
@@ -76,29 +78,60 @@ class _DropdownListState extends State<DropdownList> {
                       } else if (newValue == 'Male') {
                         _namesService.gender = 'M';
                         defgender = "Male";
+                      } else {
+                        _namesService.gender = 'O';
+                        defgender = "Both";
                       }
                     });
                   }),
-              // DropdownButton<String>(
-              //   value: defsort,
-              // items: sortt.map((String item) {
-              //   return DropdownMenuItem<String>(
-              //     child: Text(item),
-              //   );
-              // }).toList(),
-              // onChanged: (newvalu) {
-              //   setState(() {
-              //     _namesService.sortby = newvalu!.toString();
-                  
-              //   });
-              // }),
-
-              DropdownButton(
-                dropdownColor: Colors.grey[100],
+              DropdownButton<String>(
+                  dropdownColor: Colors.grey[100],
                   elevation: 5,
                   borderRadius: BorderRadius.circular(10),
                   style: TextStyle(
-                      color: Colors.indigo, fontWeight: FontWeight.bold,fontSize: 18),
+                      color: Colors.indigo,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18),
+                  underline: Container(height: 3, color: Colors.indigo),
+                  hint: Text(
+                    "SortBy",
+                    style: TextStyle(
+                        color: Colors.indigo,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18),
+                  ),
+                  //value: defsort,
+                  items: sortt.map((String item) {
+                    return DropdownMenuItem<String>(
+                      value: item,
+                      child: Text(item),
+                    );
+                  }).toList(),
+                  onChanged: (newvalu) {
+                    setState(() {
+                      _namesService.sortby = newvalu!;
+                      isPositive = newvalu == 'negative' ? false : true;
+                    });
+                  }),
+              SizedBox(
+                width: 46,
+                child: Text(
+                  "Items:",
+                  textAlign: TextAlign.end,
+                  style: TextStyle(
+                      color: Colors.indigo,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16),
+                ),
+              ),
+              DropdownButton(
+                  dropdownColor: Colors.grey[100],
+                  elevation: 5,
+                  borderRadius: BorderRadius.circular(10),
+                  style: TextStyle(
+                      color: Colors.indigo,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18),
                   underline: Container(height: 3, color: Colors.indigo),
                   value: deflimit,
                   items: limitt.map((String? item) {
