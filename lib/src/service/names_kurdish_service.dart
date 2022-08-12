@@ -16,11 +16,11 @@ class KurdishNamesService {
           'limit': limit,
           'gender': gender,
           'offset': "0",
-          'sort': sortby
+          'sort': sortby,
         });
 
     // Uri _kurdishUri = Uri.parse(
-    //       'https://nawikurdi.com/api?limit=$limit&gender=$gender&offset=0&sort=$sortby');
+    //       'https://nawikurdi.com/api?limit=$limit&gender=$gender&offset=0&sort=$sortby'); or another way in below
     http.Response _response =
         await http.get(_kurdishNamesUri).catchError((err) => print("$err"));
     NamesKurdish _kurdishNames = NamesKurdish.fromJson(_response.body);
