@@ -1,3 +1,5 @@
+
+
 import 'package:http/http.dart' as http;
 import '../models/names_kurdish.dart';
 import 'package:dropdown_wecode_assignment/src/screens/names_kurdish_list.dart';
@@ -26,5 +28,14 @@ class KurdishNamesService {
     NamesKurdish _kurdishNames = NamesKurdish.fromJson(_response.body);
     //print(_response.body);
     return _kurdishNames;
+  }
+
+  Future vote({required String nameId, required bool ispos}) async {
+    String _impact = ispos == true ? "positive" : "negative";
+    await http.post(Uri.parse("https://nawikurdi.com/api/vote"), body: {
+      "name_id": nameId,
+      "uid": "hello friend",
+      "impact": _impact,
+    });
   }
 }

@@ -159,10 +159,19 @@ class _DropdownListState extends State<DropdownList> {
                   builder: ((context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Center(
-                        child: SizedBox(
-                          child: CircularProgressIndicator(),
-                          width: 50,
-                          height: 50,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              child: CircularProgressIndicator(),
+                              width: 50,
+                              height: 50,
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Text("...Loading"),
+                          ],
                         ),
                       );
                     } else if (snapshot.hasError) {
@@ -173,6 +182,7 @@ class _DropdownListState extends State<DropdownList> {
                     return ListView.builder(
                         itemCount: snapshot.data!.names.length,
                         itemBuilder: (context, index) {
+                          Name _name = snapshot.data!.names[index];
                           return ExpansionTile(
                             title: Text(
                               snapshot.data!.names[index].name,
@@ -183,12 +193,51 @@ class _DropdownListState extends State<DropdownList> {
                             ),
                             children: [
                               Text(
-                                snapshot.data!.names[index].desc,
+                                _name.desc,
                                 style: TextStyle(
                                   fontFamily: 'notosansArabic',
                                   fontSize: 14,
                                 ),
-                              )
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  ElevatedButton.icon(
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Colors.green,
+                                    ),
+                                    onPressed: () async{
+                                      await _namesService.vote(
+                                          nameId: _name.nameId.toString(),
+                                          ispos:true).then((value) {
+                                            setState(() {
+                                              
+                                            });
+                                          });
+                                    },
+                                    icon: Icon(Icons.thumb_up_alt_sharp),
+                                    label:
+                                        Text(_name.positive_votes.toString()),
+                                  ),
+                                  ElevatedButton.icon(
+                                    style: ElevatedButton.styleFrom(
+                                        primary: Colors.red),
+                                    onPressed: () async {
+                                      await _namesService.vote(
+                                          nameId: _name.nameId.toString(),
+                                          ispos:false ).then((value) {
+                                            setState(() {
+                                              
+                                            });
+                                          });
+                                    },
+                                    icon: Icon(Icons.thumb_down_alt_sharp),
+                                    label:
+                                        Text(_name.negative_votes.toString()),
+                                  ),
+                                ],
+                              ),
                             ],
                           );
                         });
